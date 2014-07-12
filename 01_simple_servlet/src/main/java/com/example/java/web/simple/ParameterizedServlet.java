@@ -1,4 +1,4 @@
-package com.example.java.web;
+package com.example.java.web.simple;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -9,9 +9,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class MyServlet extends HttpServlet {
+public class ParameterizedServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
+	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/plain");
 		try(PrintWriter pw = response.getWriter()){
@@ -21,6 +22,14 @@ public class MyServlet extends HttpServlet {
 			while(names.hasMoreElements()){
 				String header = names.nextElement();
 				pw.write(header + " = " + request.getHeader(header) + "\n");
+			}
+			
+			pw.write("\nInit parameters\n");
+			// names and parameters also can be accesed via getServletConfig().getInitParameterNames()
+			Enumeration<String> initParameterNamess = getInitParameterNames();
+			while(initParameterNamess.hasMoreElements()){
+				String name = initParameterNamess.nextElement();
+				pw.write(name + " = " + getInitParameter(name) + "\n");
 			}
 		}
 	}
